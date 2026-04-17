@@ -11,37 +11,31 @@
 using namespace std;
 
 int main() {
-    float n, d;
 
-    Quebrado<float> q1, q2, resultado;
-    Operacion<float> operacion;
+    Quebrado<float> q1(1, 2);
+    Quebrado<float> q2(3, 4);
 
-    cout << "--- Ingrese el primer quebrado ---" << endl;
-    cout << "Numerador: ";
-    cin >> n;
-    q1.setNumerador(n);
+    Operacion<float> op;
 
-    cout << "Denominador: ";
-    cin >> d;
-    q1.setDenominador(d);
 
-    cout << "\n--- Ingrese el segundo quebrado ---" << endl;
-    cout << "Numerador: ";
-    cin >> n;
-    q2.setNumerador(n);
+    Quebrado<float> r0 = q1 + q2;
 
-    cout << "Denominador: ";
-    cin >> d;
-    q2.setDenominador(d);
 
-    resultado = operacion.sumar(q1, q2);
+    Quebrado<float> r2;
+    op.sumar(q1, q2, r2);
 
-    cout << "\nResultado: ";
-    operacion.mostrar(q1);
-    cout << " + ";
-    operacion.mostrar(q2);
-    cout << " = ";
-    operacion.mostrar(resultado);
+
+    Quebrado<float> r3;
+    op.sumar(q1, q2, &r3);
+
+    cout << "Operador +: ";
+    op.mostrar(r0);
+
+    cout << "\nReferencia: ";
+    op.mostrar(r2);
+
+    cout << "\nPuntero: ";
+    op.mostrar(r3);
 
     cout << endl;
 

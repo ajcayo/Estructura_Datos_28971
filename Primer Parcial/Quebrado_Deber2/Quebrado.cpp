@@ -4,37 +4,43 @@
  * Modified: jueves, 9 de abril de 2026 07:09:19 p. m.
  * Purpose: Declaration of the class Quebrado
  ***********************************************************************/
+#ifndef OPERACION_H
+#define OPERACION_H
 
+#include <iostream>
 #include "Quebrado.h"
+using namespace std;
 
 template <typename T>
-Quebrado<T>::Quebrado() {
-    numerador = 0;
-    denominador = 1;
-}
+class Operacion {
+public:
+
+
+    void sumar(const Quebrado<T>& q1, const Quebrado<T>& q2, Quebrado<T>& resultado);
+
+    void sumar(const Quebrado<T>& q1, const Quebrado<T>& q2, Quebrado<T>* resultado);
+
+    void mostrar(const Quebrado<T>& q);
+};
+
 
 template <typename T>
-Quebrado<T>::Quebrado(T n, T d) {
-    numerador = n;
-    denominador = d;
+void Operacion<T>::sumar(const Quebrado<T>& q1, const Quebrado<T>& q2, Quebrado<T>& resultado) {
+
+    resultado = q1 + q2;   
 }
 
-template <typename T>
-void Quebrado<T>::setNumerador(T n) {
-    numerador = n;
-}
 
 template <typename T>
-void Quebrado<T>::setDenominador(T d) {
-    denominador = d;
+void Operacion<T>::sumar(const Quebrado<T>& q1, const Quebrado<T>& q2, Quebrado<T>* resultado) {
+
+    *resultado = q1 + q2;   
 }
 
-template <typename T>
-T Quebrado<T>::getNumerador() {
-    return numerador;
-}
 
 template <typename T>
-T Quebrado<T>::getDenominador() {
-    return denominador;
+void Operacion<T>::mostrar(const Quebrado<T>& q) {
+    cout << q.getNumerador() << "/" << q.getDenominador();
 }
+
+#endif

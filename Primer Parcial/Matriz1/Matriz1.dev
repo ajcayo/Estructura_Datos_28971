@@ -1,6 +1,6 @@
 [Project]
-filename=Vector.dev
-name=Vector
+filename=Matriz1.dev
+name=Matriz1
 Type=1
 Ver=2
 ObjFiles=
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=Vector.cpp
+FileName=Matriz.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -71,7 +71,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=Vector.h
+FileName=Proceso.h
 CompileCpp=1
 Folder=
 Compile=1
