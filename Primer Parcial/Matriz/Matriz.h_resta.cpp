@@ -17,7 +17,7 @@ public:
     void ingresar();
     void mostrar() const;
 
-    Matriz<T> operator+(const Matriz<T>& m) const;
+    Matriz<T> operator-(const Matriz<T>& m) const;
 };
 
 #endif

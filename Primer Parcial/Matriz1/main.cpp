@@ -15,19 +15,21 @@ int main() {
     Matriz<int> m1(f, c);
     Matriz<int> m2(f, c);
 
-    cout << "\n--- Matriz 1 ---" << endl;
+    m1.encerar();
+    m2.encerar();
+
+    cout << "\n--- Matriz 1 ---\n";
     m1.ingresar();
 
-    cout << "\n--- Matriz 2 ---" << endl;
+    cout << "\n--- Matriz 2 ---\n";
     m2.ingresar();
 
-    Proceso<int> proceso;
-    // Ahora esto funcionará sin corromper la memoria
-    Matriz<int> resultado = proceso.sumar(m1, m2);
+    Proceso<int> p;
 
-    cout << "\n--- Resultado ---" << endl;
-    proceso.mostrar(resultado);
+    Matriz<int> r = p.sumar(m1, m2);
+
+    cout << "\n--- Resultado ---\n";
+    p.imprimir(r);
 
     return 0;
 }
-

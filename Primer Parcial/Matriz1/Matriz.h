@@ -2,6 +2,7 @@
 #define MATRIZ_H
 
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 template <typename T>
@@ -12,63 +13,79 @@ private:
     int columnas;
 
 public:
+
     Matriz(int f, int c) {
         filas = f;
         columnas = c;
-        datos = new T*[filas];
+
+        datos = (T**)malloc(sizeof(T*) * filas);
         for(int i = 0; i < filas; i++) {
-            datos[i] = new T[columnas];
+            *(datos + i) = (T*)malloc(sizeof(T) * columnas);
         }
     }
 
-    // --- AGREGADO: Constructor de Copias para evitar errores de memoria ---
-    Matriz(const Matriz<T>& otra) {
-        filas = otra.filas;
-        columnas = otra.columnas;
-        datos = new T*[filas];
+
+    T** getDatos() {
+        return datos;
+    }
+
+    int getFilas() {
+        return filas;
+    }
+
+    int getColumnas() {
+        return columnas;
+    }
+
+
+    void setDato(int i, int j, T valor) {
+        *(*(datos + i) + j) = valor;
+    }
+
+    T getDato(int i, int j) {
+        return *(*(datos + i) + j);
+    }
+
+
+    void encerar() {
         for(int i = 0; i < filas; i++) {
-            datos[i] = new T[columnas];
             for(int j = 0; j < columnas; j++) {
-                datos[i][j] = otra.datos[i][j];
+                *(*(datos + i) + j) = 0;
             }
         }
     }
 
-    ~Matriz() {
-        for(int i = 0; i < filas; i++) {
-            delete[] datos[i];
-        }
-        delete[] datos;
-    }
 
     void ingresar() {
-        cout << "Ingrese datos:" << endl;
         for(int i = 0; i < filas; i++) {
             for(int j = 0; j < columnas; j++) {
-                cout << "[" << i << "][" << j << "]: ";
-                cin >> datos[i][j];
+                cout << "Ingrese [" << i << "][" << j << "]: ";
+                cin >> *(*(datos + i) + j);
             }
         }
     }
 
-    void mostrar() const {
+
+    void imprimir() {
         for(int i = 0; i < filas; i++) {
             for(int j = 0; j < columnas; j++) {
-                cout << datos[i][j] << " ";
+                cout << *(*(datos + i) + j) << " ";
             }
             cout << endl;
         }
     }
 
-    // Corregido: se añade 'const' para que Proceso pueda usarlo con referencias constantes
-    Matriz<T> operator + (const Matriz<T>& m) const {
-        Matriz<T> resultado(filas, columnas);
+
+    Matriz<T> operator+(Matriz<T>& m) {
+        Matriz<T> r(filas, columnas);
+
         for(int i = 0; i < filas; i++) {
             for(int j = 0; j < columnas; j++) {
-                resultado.datos[i][j] = this->datos[i][j] + m.datos[i][j];
+                *(*(r.datos + i) + j) =
+                    *(*(datos + i) + j) + *(*(m.datos + i) + j);
             }
         }
-        return resultado;
+        return r;
     }
 };
 

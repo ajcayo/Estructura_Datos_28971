@@ -55,14 +55,22 @@ void Matriz<T>::mostrar() const {
 }
 
 template <typename T>
-Matriz<T> Matriz<T>::operator+(const Matriz<T>& m) const {
-    Matriz<T> r(filas, columnas, profundidad);
+Matriz<T> Matriz<T>::operator*(const Matriz<T>& m) const {
 
-    for(int i=0;i<filas;i++){
-        for(int j=0;j<columnas;j++){
-            for(int k=0;k<profundidad;k++){
-                *(*(*(r.datos+i)+j)+k) =
-                *(*(*(datos+i)+j)+k) + *(*(*(m.datos+i)+j)+k);
+    // resultado: filas de A x columnas de B
+    Matriz<T> r(filas, m.columnas, profundidad);
+
+    for(int k=0;k<profundidad;k++){           // capa
+        for(int i=0;i<filas;i++){             // filas A
+            for(int j=0;j<m.columnas;j++){    // columnas B
+
+                *(*(*(r.datos+i)+j)+k) = 0;
+
+                for(int x=0;x<columnas;x++){  // suma
+                    *(*(*(r.datos+i)+j)+k) +=
+                    (*(*(*(datos+i)+x)+k)) *
+                    (*(*(*(m.datos+x)+j)+k));
+                }
             }
         }
     }
@@ -70,4 +78,4 @@ Matriz<T> Matriz<T>::operator+(const Matriz<T>& m) const {
 }
 
 template class Matriz<int>;
-template class Matriz<float>; 
+template class Matriz<float>;

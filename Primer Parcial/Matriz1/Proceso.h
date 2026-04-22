@@ -6,12 +6,12 @@
 template <typename T>
 class Proceso {
 public:
-    Matriz<T> sumar(const Matriz<T>& m1, const Matriz<T>& m2) {
+    Matriz<T> sumar(Matriz<T>& m1, Matriz<T>& m2) {
         return m1 + m2;
     }
 
-    void mostrar(const Matriz<T>& m) {
-        m.mostrar();
+    void imprimir(Matriz<T>& m) {
+        m.imprimir();
     }
 };
 

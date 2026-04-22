@@ -55,14 +55,14 @@ void Matriz<T>::mostrar() const {
 }
 
 template <typename T>
-Matriz<T> Matriz<T>::operator+(const Matriz<T>& m) const {
+Matriz<T> Matriz<T>::operator-(const Matriz<T>& m) const {
     Matriz<T> r(filas, columnas, profundidad);
 
     for(int i=0;i<filas;i++){
         for(int j=0;j<columnas;j++){
             for(int k=0;k<profundidad;k++){
                 *(*(*(r.datos+i)+j)+k) =
-                *(*(*(datos+i)+j)+k) + *(*(*(m.datos+i)+j)+k);
+                *(*(*(datos+i)+j)+k) - *(*(*(m.datos+i)+j)+k);
             }
         }
     }
@@ -70,4 +70,4 @@ Matriz<T> Matriz<T>::operator+(const Matriz<T>& m) const {
 }
 
 template class Matriz<int>;
-template class Matriz<float>; 
+template class Matriz<float>;

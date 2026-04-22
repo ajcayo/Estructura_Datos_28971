@@ -24,10 +24,11 @@ int main() {
     m2.ingresar();
 
     Proceso<int> proceso;
-    Matriz<int> r = proceso.sumar(m1, m2);
 
-    cout << "\n--- Resultado ---\n";
-    proceso.mostrar(r);
+    Matriz<int> resta = proceso.restar(m1, m2);
+
+    cout << "\n--- Resultado (Resta) ---\n";
+    proceso.mostrar(resta);
 
     return 0;
 }

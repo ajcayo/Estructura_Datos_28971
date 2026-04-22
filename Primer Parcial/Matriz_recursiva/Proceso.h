@@ -6,7 +6,7 @@
 template <typename T>
 class Proceso {
 public:
-    Matriz<T> sumar(const Matriz<T>& m1, const Matriz<T>& m2);
+    Matriz<T> multiplicar(const Matriz<T>& m1, const Matriz<T>& m2);
     void mostrar(const Matriz<T>& m);
 };
 

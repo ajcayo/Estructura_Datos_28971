@@ -1,8 +1,8 @@
 #include "Proceso.h"
 
 template <typename T>
-Matriz<T> Proceso<T>::sumar(const Matriz<T>& m1, const Matriz<T>& m2) {
-    return m1 + m2;
+Matriz<T> Proceso<T>::restar(const Matriz<T>& m1, const Matriz<T>& m2) {
+    return m1 - m2;
 }
 
 template <typename T>

@@ -1,15 +1,15 @@
-# Project: RestaMatriz
+# Project: MatrizMultiplicacion
 # Makefile created by Embarcadero Dev-C++ 6.3
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = mainresta.o Matriz.h_resta.o Matriz.cpp_resta.o Proceso.h_resta.o Proceso.cpp_resta.o
-LINKOBJ  = mainresta.o Matriz.h_resta.o Matriz.cpp_resta.o Proceso.h_resta.o Proceso.cpp_resta.o
+OBJ      = main.o Matriz.o Proceso.o
+LINKOBJ  = main.o Matriz.o Proceso.o
 LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
-BIN      = RestaMatriz.exe
+BIN      = MatrizMultiplicacion.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) 
 DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
@@ -24,17 +24,11 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-mainresta.o: mainresta.cpp
-	$(CPP) -c mainresta.cpp -o mainresta.o $(CXXFLAGS)
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
-Matriz.h_resta.o: Matriz.h_resta.cpp
-	$(CPP) -c Matriz.h_resta.cpp -o Matriz.h_resta.o $(CXXFLAGS)
+Matriz.o: Matriz.cpp
+	$(CPP) -c Matriz.cpp -o Matriz.o $(CXXFLAGS)
 
-Matriz.cpp_resta.o: Matriz.cpp_resta.cpp
-	$(CPP) -c Matriz.cpp_resta.cpp -o Matriz.cpp_resta.o $(CXXFLAGS)
-
-Proceso.h_resta.o: Proceso.h_resta.cpp
-	$(CPP) -c Proceso.h_resta.cpp -o Proceso.h_resta.o $(CXXFLAGS)
-
-Proceso.cpp_resta.o: Proceso.cpp_resta.cpp
-	$(CPP) -c Proceso.cpp_resta.cpp -o Proceso.cpp_resta.o $(CXXFLAGS)
+Proceso.o: Proceso.cpp
+	$(CPP) -c Proceso.cpp -o Proceso.o $(CXXFLAGS)
