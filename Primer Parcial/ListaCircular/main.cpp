@@ -1,14 +1,14 @@
 #include <iostream>
-#include "Lista.h"
+#include "ListaCircular.h"
 using namespace std;
 
 int main() {
-    Lista lista;
+    ListaCircular lista;
     int opcion;
     string cedula, nombre;
 
     do {
-        cout << "\n--- MENU ---\n";
+        cout << "\n--- LISTA CIRCULAR ---\n";
         cout << "1. Insertar\n";
         cout << "2. Buscar\n";
         cout << "3. Eliminar\n";
@@ -23,34 +23,28 @@ int main() {
             cin >> cedula;
             cout << "Nombre: ";
             cin >> nombre;
-            lista.insertarCabeza(cedula, nombre);
+            lista.insertar(cedula, nombre);
             break;
 
         case 2: {
-            cout << "Cedula a buscar: ";
+            cout << "Cedula: ";
             cin >> cedula;
+            Nodo* e = lista.buscar(cedula);
 
-            Nodo* encontrado = lista.buscar(cedula);
-
-            if (encontrado != nullptr) {
-                cout << "Encontrado: "
-                     << encontrado->getCedula()
-                     << " - "
-                     << encontrado->getNombre() << endl;
-            } else {
+            if (e != nullptr)
+                cout << "Encontrado: " << e->getNombre() << endl;
+            else
                 cout << "No encontrado\n";
-            }
             break;
         }
 
         case 3:
-            cout << "Cedula a eliminar: ";
+            cout << "Cedula: ";
             cin >> cedula;
             lista.eliminar(cedula);
             break;
 
         case 4:
-            cout << "\nLista:\n";
             lista.imprimir();
             break;
         }

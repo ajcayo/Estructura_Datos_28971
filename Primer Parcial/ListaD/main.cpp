@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Lista.h"
+#include "ListaD.h"
 using namespace std;
 
 int main() {
@@ -8,11 +8,13 @@ int main() {
     string cedula, nombre;
 
     do {
-        cout << "\n--- MENU ---\n";
-        cout << "1. Insertar\n";
-        cout << "2. Buscar\n";
-        cout << "3. Eliminar\n";
-        cout << "4. Imprimir\n";
+        cout << "\n--- MENU LISTA DOBLE ---\n";
+        cout << "1. Insertar en cabeza\n";
+        cout << "2. Insertar en cola\n";
+        cout << "3. Buscar\n";
+        cout << "4. Eliminar\n";
+        cout << "5. Imprimir\n";
+        cout << "6. Imprimir reversa\n";
         cout << "0. Salir\n";
         cout << "Opcion: ";
         cin >> opcion;
@@ -26,32 +28,44 @@ int main() {
             lista.insertarCabeza(cedula, nombre);
             break;
 
-        case 2: {
+        case 2:
+            cout << "Cedula: ";
+            cin >> cedula;
+            cout << "Nombre: ";
+            cin >> nombre;
+            lista.insertarCola(cedula, nombre);
+            break;
+
+        case 3: {
             cout << "Cedula a buscar: ";
             cin >> cedula;
+            Nodo* e = lista.buscar(cedula);
 
-            Nodo* encontrado = lista.buscar(cedula);
-
-            if (encontrado != nullptr) {
+            if (e != nullptr) {
                 cout << "Encontrado: "
-                     << encontrado->getCedula()
+                     << e->getCedula()
                      << " - "
-                     << encontrado->getNombre() << endl;
+                     << e->getNombre() << endl;
             } else {
                 cout << "No encontrado\n";
             }
             break;
         }
 
-        case 3:
+        case 4:
             cout << "Cedula a eliminar: ";
             cin >> cedula;
             lista.eliminar(cedula);
             break;
 
-        case 4:
+        case 5:
             cout << "\nLista:\n";
             lista.imprimir();
+            break;
+
+        case 6:
+            cout << "\nLista en reversa:\n";
+            lista.imprimirReversa();
             break;
         }
 

@@ -9,6 +9,7 @@ private:
     string cedula;
     string nombre;
     Nodo* siguiente;
+    Nodo* anterior;
 
 public:
     Nodo(string, string);
@@ -16,10 +17,12 @@ public:
     void setCedula(string);
     void setNombre(string);
     void setSiguiente(Nodo*);
+    void setAnterior(Nodo*);
 
     string getCedula();
     string getNombre();
     Nodo* getSiguiente();
+    Nodo* getAnterior();
 };
 
 #endif

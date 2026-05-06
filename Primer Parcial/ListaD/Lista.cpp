@@ -20,11 +20,23 @@ void Lista::insertarCabeza(string cedula, string nombre) {
     Nodo* nuevo = new Nodo(cedula, nombre);
 
     if (cabeza == nullptr) {
-        cabeza = nuevo;
-        cola = nuevo;
+        cabeza = cola = nuevo;
     } else {
         nuevo->setSiguiente(cabeza);
+        cabeza->setAnterior(nuevo);
         cabeza = nuevo;
+    }
+}
+
+void Lista::insertarCola(string cedula, string nombre) {
+    Nodo* nuevo = new Nodo(cedula, nombre);
+
+    if (cola == nullptr) {
+        cabeza = cola = nuevo;
+    } else {
+        cola->setSiguiente(nuevo);
+        nuevo->setAnterior(cola);
+        cola = nuevo;
     }
 }
 
@@ -36,6 +48,13 @@ void Lista::imprimir() {
     }
 }
 
+void Lista::imprimirReversa() {
+    Nodo* aux = cola;
+    while (aux != nullptr) {
+        cout << aux->getCedula() << " - " << aux->getNombre() << endl;
+        aux = aux->getAnterior();
+    }
+}
 
 Nodo* Lista::buscar(string cedula) {
     Nodo* aux = cabeza;
@@ -51,23 +70,27 @@ Nodo* Lista::buscar(string cedula) {
 
 void Lista::eliminar(string cedula) {
     Nodo* aux = cabeza;
-    Nodo* anterior = nullptr;
 
     while (aux != nullptr) {
         if (aux->getCedula() == cedula) {
 
-            if (anterior == nullptr) {
+            if (aux == cabeza) {
                 cabeza = aux->getSiguiente();
-
-                if (cabeza == nullptr) {
+                if (cabeza != nullptr)
+                    cabeza->setAnterior(nullptr);
+                else
                     cola = nullptr;
-                }
-            } else {
-                anterior->setSiguiente(aux->getSiguiente());
-
-                if (aux == cola) {
-                    cola = anterior;
-                }
+            }
+            else if (aux == cola) {
+                cola = aux->getAnterior();
+                if (cola != nullptr)
+                    cola->setSiguiente(nullptr);
+                else
+                    cabeza = nullptr;
+            }
+            else {
+                aux->getAnterior()->setSiguiente(aux->getSiguiente());
+                aux->getSiguiente()->setAnterior(aux->getAnterior());
             }
 
             delete aux;
@@ -75,7 +98,6 @@ void Lista::eliminar(string cedula) {
             return;
         }
 
-        anterior = aux;
         aux = aux->getSiguiente();
     }
 

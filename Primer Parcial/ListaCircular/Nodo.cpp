@@ -6,7 +6,7 @@ Nodo::Nodo(string c, string n) {
     siguiente = nullptr;
 }
 
-void Nodo::setCedula(string c) {
+void Nodo::setCedula(string c) { 
 cedula = c; 
 }
 void Nodo::setNombre(string n) { 

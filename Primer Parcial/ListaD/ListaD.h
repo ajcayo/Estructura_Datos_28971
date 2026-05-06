@@ -1,7 +1,7 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#include "Nodo.h"
+#include "NodoD.h"
 
 class Lista {
 private:
@@ -13,9 +13,12 @@ public:
     ~Lista();
 
     void insertarCabeza(string, string);
-    void imprimir();
+    void insertarCola(string, string);
 
-    Nodo* buscar(string);   
+    void imprimir();
+    void imprimirReversa();
+
+    Nodo* buscar(string);
     void eliminar(string);
 };
 
