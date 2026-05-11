@@ -4,6 +4,7 @@
 #include "Nodo.h"
 #include <fstream>
 #include <regex>
+#include <functional>
 
 using namespace std;
 
@@ -27,18 +28,18 @@ public:
     void cargarDatos(string);
     void guardarDatos(string);
 
-    // Provincias
     string* cargarProvincias(string);
     void reporteProvincias(string*);
 
-    // Validaciones
     bool esCedulaValida(string);
     bool existeCedula(string);
     bool esNombreValido(string);
 
-    // Contadores
     int contarVocales(string);
     int contarLetras(string);
+
+    // LAMBDA BASE
+    void recorrer(function<void(Nodo*)>);
 };
 
 #endif

@@ -8,7 +8,6 @@ int main() {
     string c, n, ref;
 
     lista.cargarDatos("datos.txt");
-
     string* provincias = lista.cargarProvincias("provincias.txt");
 
     do {

@@ -19,7 +19,6 @@ Lista::~Lista() {
     }
 }
 
-// INSERTAR INICIO
 void Lista::insertarCabeza(string cedula, string nombre) {
     Nodo* nuevo = new Nodo(cedula, nombre);
 
@@ -32,7 +31,6 @@ void Lista::insertarCabeza(string cedula, string nombre) {
     }
 }
 
-// INSERTAR FINAL
 void Lista::insertarFinal(string cedula, string nombre) {
     Nodo* nuevo = new Nodo(cedula, nombre);
 
@@ -45,7 +43,6 @@ void Lista::insertarFinal(string cedula, string nombre) {
     }
 }
 
-// INSERTAR ENTRE
 void Lista::insertarEntre(string ref, string cedula, string nombre) {
     Nodo* actual = cabeza;
 
@@ -59,9 +56,8 @@ void Lista::insertarEntre(string ref, string cedula, string nombre) {
         nuevo->setSiguiente(actual->getSiguiente());
         actual->setSiguiente(nuevo);
 
-        if (nuevo->getSiguiente() == nullptr) {
+        if (nuevo->getSiguiente() == nullptr)
             cola = nuevo;
-        }
 
         cout << "Insertado entre nodos\n";
     } else {
@@ -69,7 +65,6 @@ void Lista::insertarEntre(string ref, string cedula, string nombre) {
     }
 }
 
-// IMPRIMIR
 void Lista::imprimir() {
     Nodo* aux = cabeza;
 
@@ -84,7 +79,6 @@ void Lista::imprimir() {
     }
 }
 
-// BUSCAR
 Nodo* Lista::buscar(string cedula) {
     Nodo* aux = cabeza;
 
@@ -95,7 +89,6 @@ Nodo* Lista::buscar(string cedula) {
     return nullptr;
 }
 
-// ELIMINAR
 void Lista::eliminar(string cedula) {
     Nodo* aux = cabeza;
     Nodo* ant = nullptr;
@@ -123,7 +116,6 @@ void Lista::eliminar(string cedula) {
     cout << "No encontrado\n";
 }
 
-// GUARDAR
 void Lista::guardarDatos(string archivo) {
     ofstream file(archivo);
 
@@ -136,7 +128,6 @@ void Lista::guardarDatos(string archivo) {
     file.close();
 }
 
-// CARGAR
 void Lista::cargarDatos(string archivo) {
     ifstream file(archivo);
 
@@ -148,7 +139,6 @@ void Lista::cargarDatos(string archivo) {
     file.close();
 }
 
-// PROVINCIAS
 string* Lista::cargarProvincias(string archivo) {
     string* nombres = new string[31];
 
@@ -172,26 +162,24 @@ void Lista::reporteProvincias(string* nombres) {
     while (aux != nullptr) {
         string c = aux->getCedula();
 
-        int prov = (c[0]-'0')*10 + (c[1]-'0');
+        int prov = ((c[0]-'0') << 3) + ((c[0]-'0') << 1) + (c[1]-'0'); // x10 con bits
 
-        if ((prov >= 1 && prov <= 24) || prov == 30) {
+        if ((prov >= 1 && prov <= 24) || prov == 30)
             (*(cont + prov))++;
-        }
 
         aux = aux->getSiguiente();
     }
 
     cout << "\n--- REPORTE ---\n";
     for (int i = 1; i <= 30; i++) {
-        if (*(cont + i) > 0) {
+        if (*(cont + i) > 0)
             cout << *(nombres + i) << " -> " << *(cont + i) << endl;
-        }
     }
 
     delete[] cont;
 }
 
-// VALIDACIONES
+// VALIDACIONES BIT A BIT
 bool Lista::existeCedula(string c) {
     return buscar(c) != nullptr;
 }
@@ -212,8 +200,8 @@ bool Lista::esCedulaValida(string cedula) {
     for (int i = 0; i < 9; i++) {
         int d = cedula[i] - '0';
 
-        if (i % 2 == 0) {
-            d *= 2;
+        if ((i & 1) == 0) {   // BIT A BIT
+            d <<= 1;          // multiplicar por 2
             if (d > 9) d -= 9;
         }
 
@@ -225,16 +213,15 @@ bool Lista::esCedulaValida(string cedula) {
     return ver == (cedula[9] - '0');
 }
 
-// VOCALES
+// VOCALES BIT A BIT
 int Lista::contarVocales(string nombre) {
     int c = 0;
     const char* ptr = nombre.c_str();
 
     while (*ptr) {
-        char l = *ptr;
+        char l = (*ptr | 32); // convierte a minúscula con bits
 
-        if (l=='a'||l=='e'||l=='i'||l=='o'||l=='u'||
-            l=='A'||l=='E'||l=='I'||l=='O'||l=='U')
+        if (l=='a'||l=='e'||l=='i'||l=='o'||l=='u')
             c++;
 
         ptr++;
@@ -242,7 +229,6 @@ int Lista::contarVocales(string nombre) {
     return c;
 }
 
-// LETRAS
 int Lista::contarLetras(string nombre) {
     int c = 0;
     const char* ptr = nombre.c_str();

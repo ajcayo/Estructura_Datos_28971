@@ -4,7 +4,6 @@
 #include "Nodo.h"
 #include <fstream>
 #include <regex>
-
 using namespace std;
 
 class Lista {
@@ -27,16 +26,13 @@ public:
     void cargarDatos(string);
     void guardarDatos(string);
 
-    // Provincias
     string* cargarProvincias(string);
     void reporteProvincias(string*);
 
-    // Validaciones
     bool esCedulaValida(string);
     bool existeCedula(string);
     bool esNombreValido(string);
 
-    // Contadores
     int contarVocales(string);
     int contarLetras(string);
 };

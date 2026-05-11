@@ -8,8 +8,14 @@ int main() {
     string c, n, ref;
 
     lista.cargarDatos("datos.txt");
-
     string* provincias = lista.cargarProvincias("provincias.txt");
+
+    //LAMBDA DE VALIDACION
+    auto validar = [&](string c, string n) {
+        return lista.esCedulaValida(c) &&
+               !lista.existeCedula(c) &&
+               lista.esNombreValido(n);
+    };
 
     do {
         cout << "\n--- MENU ---\n";
@@ -28,7 +34,7 @@ int main() {
 
         case 1:
             cin >> c >> n;
-            if (lista.esCedulaValida(c) && !lista.existeCedula(c))
+            if (validar(c,n))
                 lista.insertarCabeza(c,n);
             else
                 cout << "Error\n";

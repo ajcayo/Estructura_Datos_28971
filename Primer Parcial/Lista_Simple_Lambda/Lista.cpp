@@ -2,6 +2,7 @@
 #include <fstream>
 #include <regex>
 #include <cctype>
+#include <functional>
 #include "Lista.h"
 using namespace std;
 
@@ -19,7 +20,16 @@ Lista::~Lista() {
     }
 }
 
-// INSERTAR INICIO
+// 🔥 RECORRIDO GENERAL CON LAMBDA
+void Lista::recorrer(function<void(Nodo*)> accion) {
+    Nodo* aux = cabeza;
+    while (aux != nullptr) {
+        accion(aux);
+        aux = aux->getSiguiente();
+    }
+}
+
+// INSERTAR
 void Lista::insertarCabeza(string cedula, string nombre) {
     Nodo* nuevo = new Nodo(cedula, nombre);
 
@@ -32,7 +42,6 @@ void Lista::insertarCabeza(string cedula, string nombre) {
     }
 }
 
-// INSERTAR FINAL
 void Lista::insertarFinal(string cedula, string nombre) {
     Nodo* nuevo = new Nodo(cedula, nombre);
 
@@ -45,7 +54,6 @@ void Lista::insertarFinal(string cedula, string nombre) {
     }
 }
 
-// INSERTAR ENTRE
 void Lista::insertarEntre(string ref, string cedula, string nombre) {
     Nodo* actual = cabeza;
 
@@ -55,13 +63,11 @@ void Lista::insertarEntre(string ref, string cedula, string nombre) {
 
     if (actual != nullptr) {
         Nodo* nuevo = new Nodo(cedula, nombre);
-
         nuevo->setSiguiente(actual->getSiguiente());
         actual->setSiguiente(nuevo);
 
-        if (nuevo->getSiguiente() == nullptr) {
+        if (nuevo->getSiguiente() == nullptr)
             cola = nuevo;
-        }
 
         cout << "Insertado entre nodos\n";
     } else {
@@ -69,33 +75,31 @@ void Lista::insertarEntre(string ref, string cedula, string nombre) {
     }
 }
 
-// IMPRIMIR
+//IMPRIMIR CON LAMBDA
 void Lista::imprimir() {
-    Nodo* aux = cabeza;
-
-    if (aux == nullptr) {
+    if (cabeza == nullptr) {
         cout << "Lista vacia\n";
         return;
     }
 
-    while (aux != nullptr) {
-        cout << aux->getCedula() << " - " << aux->getNombre() << endl;
-        aux = aux->getSiguiente();
-    }
+    recorrer([](Nodo* n) {
+        cout << n->getCedula() << " - " << n->getNombre() << endl;
+    });
 }
 
-// BUSCAR
+//BUSCAR CON LAMBDA
 Nodo* Lista::buscar(string cedula) {
-    Nodo* aux = cabeza;
+    Nodo* encontrado = nullptr;
 
-    while (aux != nullptr) {
-        if (aux->getCedula() == cedula) return aux;
-        aux = aux->getSiguiente();
-    }
-    return nullptr;
+    recorrer([&](Nodo* n) {
+        if (n->getCedula() == cedula)
+            encontrado = n;
+    });
+
+    return encontrado;
 }
 
-// ELIMINAR
+// ELIMINAR (se mantiene normal por lógica compleja)
 void Lista::eliminar(string cedula) {
     Nodo* aux = cabeza;
     Nodo* ant = nullptr;
@@ -123,15 +127,13 @@ void Lista::eliminar(string cedula) {
     cout << "No encontrado\n";
 }
 
-// GUARDAR
+//GUARDAR CON LAMBDA
 void Lista::guardarDatos(string archivo) {
     ofstream file(archivo);
 
-    Nodo* aux = cabeza;
-    while (aux != nullptr) {
-        file << aux->getCedula() << " " << aux->getNombre() << endl;
-        aux = aux->getSiguiente();
-    }
+    recorrer([&](Nodo* n) {
+        file << n->getCedula() << " " << n->getNombre() << endl;
+    });
 
     file.close();
 }
@@ -139,16 +141,15 @@ void Lista::guardarDatos(string archivo) {
 // CARGAR
 void Lista::cargarDatos(string archivo) {
     ifstream file(archivo);
-
     string c, n;
-    while (file >> c >> n) {
+
+    while (file >> c >> n)
         insertarFinal(c, n);
-    }
 
     file.close();
 }
 
-// PROVINCIAS
+//PROVINCIAS CON LAMBDA
 string* Lista::cargarProvincias(string archivo) {
     string* nombres = new string[31];
 
@@ -165,47 +166,36 @@ string* Lista::cargarProvincias(string archivo) {
 }
 
 void Lista::reporteProvincias(string* nombres) {
-    int* cont = new int[31]();
+    int cont[31] = {0};
 
-    Nodo* aux = cabeza;
-
-    while (aux != nullptr) {
-        string c = aux->getCedula();
-
+    recorrer([&](Nodo* n) {
+        string c = n->getCedula();
         int prov = (c[0]-'0')*10 + (c[1]-'0');
 
-        if ((prov >= 1 && prov <= 24) || prov == 30) {
-            (*(cont + prov))++;
-        }
-
-        aux = aux->getSiguiente();
-    }
+        if ((prov >= 1 && prov <= 24) || prov == 30)
+            cont[prov]++;
+    });
 
     cout << "\n--- REPORTE ---\n";
+
     for (int i = 1; i <= 30; i++) {
-        if (*(cont + i) > 0) {
-            cout << *(nombres + i) << " -> " << *(cont + i) << endl;
+        if (cont[i] > 0) {
+            cout << nombres[i] << " -> " << cont[i] << endl;
         }
     }
-
-    delete[] cont;
 }
 
-// VALIDACIONES
-bool Lista::existeCedula(string c) {
-    return buscar(c) != nullptr;
-}
-
-bool Lista::esNombreValido(string nombre) {
-    regex patron("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$");
-    return regex_match(nombre, patron);
-}
-
+//VALIDAR CEDULA CON LAMBDA INTERNA
 bool Lista::esCedulaValida(string cedula) {
+
+    auto esNumero = [](char c) {
+        return isdigit(c);
+    };
+
     if (cedula.length() != 10) return false;
 
     for (char c : cedula)
-        if (!isdigit(c)) return false;
+        if (!esNumero(c)) return false;
 
     int suma = 0;
 
@@ -225,31 +215,42 @@ bool Lista::esCedulaValida(string cedula) {
     return ver == (cedula[9] - '0');
 }
 
-// VOCALES
-int Lista::contarVocales(string nombre) {
-    int c = 0;
-    const char* ptr = nombre.c_str();
-
-    while (*ptr) {
-        char l = *ptr;
-
-        if (l=='a'||l=='e'||l=='i'||l=='o'||l=='u'||
-            l=='A'||l=='E'||l=='I'||l=='O'||l=='U')
-            c++;
-
-        ptr++;
-    }
-    return c;
+bool Lista::existeCedula(string c) {
+    return buscar(c) != nullptr;
 }
 
-// LETRAS
-int Lista::contarLetras(string nombre) {
-    int c = 0;
-    const char* ptr = nombre.c_str();
+bool Lista::esNombreValido(string nombre) {
+    regex patron("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$");
+    return regex_match(nombre, patron);
+}
 
-    while (*ptr) {
-        if (*ptr != ' ') c++;
-        ptr++;
-    }
-    return c;
+// VOCALES CON LAMBDA
+int Lista::contarVocales(string nombre) {
+
+    auto esVocal = [](char l) {
+        return (l=='a'||l=='e'||l=='i'||l=='o'||l=='u'||
+                l=='A'||l=='E'||l=='I'||l=='O'||l=='U');
+    };
+
+    int cont = 0;
+
+    for (char c : nombre)
+        if (esVocal(c)) cont++;
+
+    return cont;
+}
+
+// LETRAS CON LAMBDA
+int Lista::contarLetras(string nombre) {
+
+    auto esLetra = [](char c) {
+        return c != ' ';
+    };
+
+    int cont = 0;
+
+    for (char c : nombre)
+        if (esLetra(c)) cont++;
+
+    return cont;
 }
