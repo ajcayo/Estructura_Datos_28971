@@ -4,6 +4,8 @@
 #include "Nodo.h"
 #include <fstream>
 #include <regex>
+#include <map>
+#include <functional>
 
 using namespace std;
 
@@ -16,9 +18,9 @@ public:
     Lista();
     ~Lista();
 
-    void insertarCabeza(string, string);
-    void insertarFinal(string, string);
-    void insertarEntre(string, string, string);
+    void insertarCabeza(string, string, string);
+    void insertarFinal(string, string, string);
+    void insertarEntre(string, string, string, string);
 
     void imprimir();
     Nodo* buscar(string);
@@ -27,18 +29,19 @@ public:
     void cargarDatos(string);
     void guardarDatos(string);
 
-    // Provincias
     string* cargarProvincias(string);
     void reporteProvincias(string*);
 
-    // Validaciones
     bool esCedulaValida(string);
     bool existeCedula(string);
     bool esNombreValido(string);
 
-    // Contadores
     int contarVocales(string);
     int contarLetras(string);
+
+    void verPares();
+    void generarCorreos();
 };
 
 #endif
+

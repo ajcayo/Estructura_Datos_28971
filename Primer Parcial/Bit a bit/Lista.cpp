@@ -239,3 +239,58 @@ int Lista::contarLetras(string nombre) {
     }
     return c;
 }
+void Lista::verPares() {
+
+    Nodo* nodoActual = cabeza; 
+    // puntero que apunta al primer nodo de la lista
+
+    cout << "\nPares encontrados:\n"; 
+    // mensaje en pantalla
+
+    while (nodoActual != nullptr) {
+    // recorre toda la lista hasta el final
+
+        auto obtenerPares = [](string texto) {
+        // función lambda: recibe la cedula como string
+
+            string salida = "";
+            // aqui se guardan los numeros pares
+
+            const char* puntero = texto.c_str();
+            // convierte el string a puntero de caracteres
+
+            while (*puntero != '\0') {
+            // recorre caracter por caracter hasta el final
+
+                int digito = *puntero - '0';
+                // convierte el caracter en numero
+
+                if (digito % 2 == 0 && digito != 0) {
+                    // si es par y no es 0
+                    salida += *puntero;
+                    // lo agrega al resultado
+                }
+                else if (digito == 0) {
+                    // caso especial del 0 (tambien es par)
+                    salida += '0';
+                }
+
+                puntero++;
+                // avanza al siguiente caracter
+            }
+
+            return salida;
+            // devuelve solo los numeros pares
+        };
+
+        string resultado = obtenerPares(nodoActual->getCedula());
+        // aplica la funcion a la cedula del nodo actual
+
+        cout << "Cedula: " << nodoActual->getCedula()
+             << " -> " << resultado << endl;
+        // imprime la cedula original y su version filtrada
+
+        nodoActual = nodoActual->getSiguiente();
+        // pasa al siguiente nodo de la lista
+    }
+}

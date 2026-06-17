@@ -3,6 +3,7 @@
 #include <regex>
 #include <cctype>
 #include "Lista.h"
+
 using namespace std;
 
 Lista::Lista() {
@@ -20,8 +21,8 @@ Lista::~Lista() {
 }
 
 // INSERTAR INICIO
-void Lista::insertarCabeza(string cedula, string nombre) {
-    Nodo* nuevo = new Nodo(cedula, nombre);
+void Lista::insertarCabeza(string cedula, string nombre, string apellido) {
+    Nodo* nuevo = new Nodo(cedula, nombre, apellido);
 
     if (cabeza == nullptr) {
         cabeza = nuevo;
@@ -33,8 +34,8 @@ void Lista::insertarCabeza(string cedula, string nombre) {
 }
 
 // INSERTAR FINAL
-void Lista::insertarFinal(string cedula, string nombre) {
-    Nodo* nuevo = new Nodo(cedula, nombre);
+void Lista::insertarFinal(string cedula, string nombre, string apellido) {
+    Nodo* nuevo = new Nodo(cedula, nombre, apellido);
 
     if (cabeza == nullptr) {
         cabeza = nuevo;
@@ -46,7 +47,7 @@ void Lista::insertarFinal(string cedula, string nombre) {
 }
 
 // INSERTAR ENTRE
-void Lista::insertarEntre(string ref, string cedula, string nombre) {
+void Lista::insertarEntre(string ref, string cedula, string nombre, string apellido) {
     Nodo* actual = cabeza;
 
     while (actual != nullptr && actual->getCedula() != ref) {
@@ -54,7 +55,7 @@ void Lista::insertarEntre(string ref, string cedula, string nombre) {
     }
 
     if (actual != nullptr) {
-        Nodo* nuevo = new Nodo(cedula, nombre);
+        Nodo* nuevo = new Nodo(cedula, nombre, apellido);
 
         nuevo->setSiguiente(actual->getSiguiente());
         actual->setSiguiente(nuevo);
@@ -79,7 +80,9 @@ void Lista::imprimir() {
     }
 
     while (aux != nullptr) {
-        cout << aux->getCedula() << " - " << aux->getNombre() << endl;
+        cout << aux->getCedula() << " - "
+             << aux->getNombre() << " "
+             << aux->getApellido() << endl;
         aux = aux->getSiguiente();
     }
 }
@@ -129,7 +132,9 @@ void Lista::guardarDatos(string archivo) {
 
     Nodo* aux = cabeza;
     while (aux != nullptr) {
-        file << aux->getCedula() << " " << aux->getNombre() << endl;
+        file << aux->getCedula() << " "
+             << aux->getNombre() << " "
+             << aux->getApellido() << endl;
         aux = aux->getSiguiente();
     }
 
@@ -140,55 +145,12 @@ void Lista::guardarDatos(string archivo) {
 void Lista::cargarDatos(string archivo) {
     ifstream file(archivo);
 
-    string c, n;
-    while (file >> c >> n) {
-        insertarFinal(c, n);
+    string c, n, a;
+    while (file >> c >> n >> a) {
+        insertarFinal(c, n, a);
     }
 
     file.close();
-}
-
-// PROVINCIAS
-string* Lista::cargarProvincias(string archivo) {
-    string* nombres = new string[31];
-
-    ifstream file(archivo);
-    int cod;
-    string nom;
-
-    while (file >> cod >> nom) {
-        *(nombres + cod) = nom;
-    }
-
-    file.close();
-    return nombres;
-}
-
-void Lista::reporteProvincias(string* nombres) {
-    int* cont = new int[31]();
-
-    Nodo* aux = cabeza;
-
-    while (aux != nullptr) {
-        string c = aux->getCedula();
-
-        int prov = (c[0]-'0')*10 + (c[1]-'0');
-
-        if ((prov >= 1 && prov <= 24) || prov == 30) {
-            (*(cont + prov))++;
-        }
-
-        aux = aux->getSiguiente();
-    }
-
-    cout << "\n--- REPORTE ---\n";
-    for (int i = 1; i <= 30; i++) {
-        if (*(cont + i) > 0) {
-            cout << *(nombres + i) << " -> " << *(cont + i) << endl;
-        }
-    }
-
-    delete[] cont;
 }
 
 // VALIDACIONES
@@ -200,56 +162,39 @@ bool Lista::esNombreValido(string nombre) {
     regex patron("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$");
     return regex_match(nombre, patron);
 }
+// Generar Correo 
+void Lista::generarCorreos() {
+    ofstream file("correos.txt");
 
-bool Lista::esCedulaValida(string cedula) {
-    if (cedula.length() != 10) return false;
+    map<string, int> contador;
 
-    for (char c : cedula)
-        if (!isdigit(c)) return false;
+    function<void(Nodo*)> recorrer = [&](Nodo* nodo) {
 
-    int suma = 0;
+        if (nodo == nullptr) return;
 
-    for (int i = 0; i < 9; i++) {
-        int d = cedula[i] - '0';
+        string nombre = nodo->getNombre();
+        string apellido = nodo->getApellido();
 
-        if (i % 2 == 0) {
-            d *= 2;
-            if (d > 9) d -= 9;
+        for (auto &c : nombre) c = tolower(c);
+        for (auto &c : apellido) c = tolower(c);
+
+        string correo = string(1, nombre[0]) + apellido;
+
+        contador[correo]++;
+        if (contador[correo] > 1) {
+            correo += to_string(contador[correo]);
         }
 
-        suma += d;
-    }
+        correo += "@turnos.ecuador.com";
 
-    int ver = (suma % 10 == 0) ? 0 : 10 - (suma % 10);
+        file << nodo->getCedula() << " -> " << correo << endl;
 
-    return ver == (cedula[9] - '0');
-}
+        recorrer(nodo->getSiguiente());
+    };
 
-// VOCALES
-int Lista::contarVocales(string nombre) {
-    int c = 0;
-    const char* ptr = nombre.c_str();
+    recorrer(cabeza);
 
-    while (*ptr) {
-        char l = *ptr;
+    file.close();
 
-        if (l=='a'||l=='e'||l=='i'||l=='o'||l=='u'||
-            l=='A'||l=='E'||l=='I'||l=='O'||l=='U')
-            c++;
-
-        ptr++;
-    }
-    return c;
-}
-
-// LETRAS
-int Lista::contarLetras(string nombre) {
-    int c = 0;
-    const char* ptr = nombre.c_str();
-
-    while (*ptr) {
-        if (*ptr != ' ') c++;
-        ptr++;
-    }
-    return c;
+    cout << "Correos generados en correos.txt\n";
 }

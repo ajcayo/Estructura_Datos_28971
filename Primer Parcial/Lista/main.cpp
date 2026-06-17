@@ -1,15 +1,14 @@
 #include <iostream>
+#include <limits>
 #include "Lista.h"
 using namespace std;
 
 int main() {
     Lista lista;
     int op;
-    string c, n, ref;
+    string c, n, a, ref;
 
     lista.cargarDatos("datos.txt");
-
-    string* provincias = lista.cargarProvincias("provincias.txt");
 
     do {
         cout << "\n--- MENU ---\n";
@@ -20,42 +19,77 @@ int main() {
         cout << "5 Eliminar\n";
         cout << "6 Imprimir\n";
         cout << "7 Guardar\n";
-        cout << "8 Reporte provincias\n";
+        cout << "8 Generar correos\n";
         cout << "0 Salir\n";
+        cout << "Opcion: ";
         cin >> op;
+
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch(op) {
 
         case 1:
-            cin >> c >> n;
+            cout << "Cedula: ";
+            cin >> c;
+            cin.ignore();
+
+            cout << "Nombre: ";
+            getline(cin, n);
+
+            cout << "Apellido: ";
+            getline(cin, a);
+
             if (lista.esCedulaValida(c) && !lista.existeCedula(c))
-                lista.insertarCabeza(c,n);
+                lista.insertarCabeza(c,n,a);
             else
                 cout << "Error\n";
             break;
 
         case 2:
-            cin >> c >> n;
-            lista.insertarFinal(c,n);
+            cout << "Cedula: ";
+            cin >> c;
+            cin.ignore();
+
+            cout << "Nombre: ";
+            getline(cin, n);
+
+            cout << "Apellido: ";
+            getline(cin, a);
+
+            lista.insertarFinal(c,n,a);
             break;
 
         case 3:
-            cin >> ref >> c >> n;
-            lista.insertarEntre(ref,c,n);
+            cout << "Cedula referencia: ";
+            cin >> ref;
+
+            cout << "Nueva cedula: ";
+            cin >> c;
+            cin.ignore();
+
+            cout << "Nombre: ";
+            getline(cin, n);
+
+            cout << "Apellido: ";
+            getline(cin, a);
+
+            lista.insertarEntre(ref,c,n,a);
             break;
 
-        case 4: {
+        case 4:
+            cout << "Cedula a buscar: ";
             cin >> c;
-            Nodo* x = lista.buscar(c);
-            if (x) {
-                cout << x->getNombre() << endl;
-                cout << "Vocales: " << lista.contarVocales(x->getNombre()) << endl;
-                cout << "Letras: " << lista.contarLetras(x->getNombre()) << endl;
-            } else cout << "No existe\n";
+            {
+                Nodo* x = lista.buscar(c);
+                if (x)
+                    cout << x->getNombre() << " " << x->getApellido() << endl;
+                else
+                    cout << "No existe\n";
+            }
             break;
-        }
 
         case 5:
+            cout << "Cedula a eliminar: ";
             cin >> c;
             lista.eliminar(c);
             break;
@@ -66,10 +100,11 @@ int main() {
 
         case 7:
             lista.guardarDatos("datos.txt");
+            cout << "Datos guardados\n";
             break;
 
         case 8:
-            lista.reporteProvincias(provincias);
+            lista.generarCorreos();
             break;
         }
 

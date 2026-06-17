@@ -1,20 +1,35 @@
-#ifndef LISTA_H
-#define LISTA_H
-
+#pragma once
 #include "Vehiculo.h"
+
+class NodoVehiculo {
+private:
+    Vehiculo* vehiculo;
+    NodoVehiculo* siguiente;
+public:
+    NodoVehiculo(Vehiculo* v);
+    ~NodoVehiculo();
+    Vehiculo* getVehiculo();
+    NodoVehiculo* getSiguiente();
+    void setSiguiente(NodoVehiculo* sig);
+};
 
 class ListaVehiculos {
 private:
-    Vehiculo* cabeza;
+    NodoVehiculo* cabeza;
+
+    void imprimir() const;
 
 public:
     ListaVehiculos();
+    ~ListaVehiculos();
+    void crear(Vehiculo* v);
+    void reportar() const;
+    Vehiculo* buscar(std::string placa) const;
+    bool actualizar(std::string placa, std::string nuevaPlaca);
+    bool eliminar(std::string placa);
 
-    void insertar(string placa, string modelo);
-    void eliminar(string placa);
-    Vehiculo* buscar(string placa);
-    void imprimir();
-    void reservarVehiculo(string placa, Persona p);
+  
+    void ordenamientoIntercambio(int criterio = 0);
+
+    NodoVehiculo* getCabeza() const;
 };
-
-#endif

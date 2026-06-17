@@ -1,0 +1,11 @@
+# Feriados fijos de Ecuador
+# Formato: DIA MES NOMBRE
+# No modificar el formato, solo los datos
+1 1 Anio Nuevo (1 Ene)
+1 5 Dia del Trabajo (1 May)
+24 5 Batalla de Pichincha (24 May)
+10 8 Primer Grito de Independencia (10 Ago)
+9 10 Independencia de Guayaquil (9 Oct)
+2 11 Dia de los Difuntos (2 Nov)
+3 11 Independencia de Cuenca (3 Nov)
+25 12 Navidad (25 Dic)

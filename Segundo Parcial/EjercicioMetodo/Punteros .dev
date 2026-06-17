@@ -1,6 +1,6 @@
 [Project]
-filename=Projecto.dev
-name=Projecto
+filename=Punteros .dev
+name=Punteros
 Type=1
 Ver=2
 ObjFiles=
@@ -50,16 +50,6 @@ ProductVersion=
 AutoIncBuildNr=0
 SyncProduct=1
 
-[Unit2]
-FileName=ListaVehiculos.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit1]
 FileName=main.cpp
 CompileCpp=1
@@ -70,8 +60,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit2]
+FileName=DetectorCiclos.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit3]
-FileName=ListaVehiculos.cpp
+FileName=DetectorCiclos.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -81,7 +81,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=Vehiculo.h
+FileName=Nodo.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -91,7 +91,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=Vehiculo.cpp
+FileName=ListaEnlazada.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -101,7 +101,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=Persona.h
+FileName=ListaEnlazada.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -111,7 +111,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=Persona.cpp
+FileName=Nodo.cpp
 CompileCpp=1
 Folder=
 Compile=1

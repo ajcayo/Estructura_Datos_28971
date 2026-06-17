@@ -99,7 +99,7 @@ Nodo* Lista::buscar(string cedula) {
     return encontrado;
 }
 
-// ELIMINAR (se mantiene normal por lógica compleja)
+// ELIMINAR 
 void Lista::eliminar(string cedula) {
     Nodo* aux = cabeza;
     Nodo* ant = nullptr;

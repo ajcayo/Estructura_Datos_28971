@@ -1,18 +1,18 @@
-# Project: Projecto
+# Project: ProyectoFinal
 # Makefile created by Embarcadero Dev-C++ 6.3
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o ListaVehiculos.o Vehiculo.o Persona.o
-LINKOBJ  = main.o ListaVehiculos.o Vehiculo.o Persona.o
+OBJ      = main.o GestorFechas.o ListaDoble.o ListaUsuarios.o ListaVehiculos.o Nodo.o Reserva.o Usuario.o Vehiculo.o GestorArchivos.o Validador.o
+LINKOBJ  = main.o GestorFechas.o ListaDoble.o ListaUsuarios.o ListaVehiculos.o Nodo.o Reserva.o Usuario.o Vehiculo.o GestorArchivos.o Validador.o
 LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
-BIN      = Projecto.exe
+BIN      = ProyectoFinal.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) 
-DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\DevCpp.exe INTERNAL_DEL
 
 .PHONY: all all-before all-after clean clean-custom
 
@@ -27,11 +27,32 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
+GestorFechas.o: GestorFechas.cpp
+	$(CPP) -c GestorFechas.cpp -o GestorFechas.o $(CXXFLAGS)
+
+ListaDoble.o: ListaDoble.cpp
+	$(CPP) -c ListaDoble.cpp -o ListaDoble.o $(CXXFLAGS)
+
+ListaUsuarios.o: ListaUsuarios.cpp
+	$(CPP) -c ListaUsuarios.cpp -o ListaUsuarios.o $(CXXFLAGS)
+
 ListaVehiculos.o: ListaVehiculos.cpp
 	$(CPP) -c ListaVehiculos.cpp -o ListaVehiculos.o $(CXXFLAGS)
+
+Nodo.o: Nodo.cpp
+	$(CPP) -c Nodo.cpp -o Nodo.o $(CXXFLAGS)
+
+Reserva.o: Reserva.cpp
+	$(CPP) -c Reserva.cpp -o Reserva.o $(CXXFLAGS)
+
+Usuario.o: Usuario.cpp
+	$(CPP) -c Usuario.cpp -o Usuario.o $(CXXFLAGS)
 
 Vehiculo.o: Vehiculo.cpp
 	$(CPP) -c Vehiculo.cpp -o Vehiculo.o $(CXXFLAGS)
 
-Persona.o: Persona.cpp
-	$(CPP) -c Persona.cpp -o Persona.o $(CXXFLAGS)
+GestorArchivos.o: GestorArchivos.cpp
+	$(CPP) -c GestorArchivos.cpp -o GestorArchivos.o $(CXXFLAGS)
+
+Validador.o: Validador.cpp
+	$(CPP) -c Validador.cpp -o Validador.o $(CXXFLAGS)
