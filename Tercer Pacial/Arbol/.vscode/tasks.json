@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "1. Compilar DLL",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-shared",
+                "-o", "ArbolPantalla.dll",
+                "ArbolPantalla.cpp",
+                "-lgdi32",
+                "-luser32",
+                "-lkernel32",
+                "-static-libgcc",
+                "-static-libstdc++"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "2. Compilar Programa",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-o", "programa.exe",
+                "main.cpp",
+                "-lgdi32",
+                "-luser32",
+                "-lkernel32",
+                "-mwindows",
+                "-static-libgcc",
+                "-static-libstdc++"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "3. Ejecutar",
+            "type": "shell",
+            "command": "./programa.exe",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always"
+            },
+            "dependsOn": ["1. Compilar DLL", "2. Compilar Programa"]
+        }
+    ]
+}
