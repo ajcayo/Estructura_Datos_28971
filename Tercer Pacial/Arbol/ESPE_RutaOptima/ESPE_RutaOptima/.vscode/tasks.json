@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Ruta ESPE",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-g",
+        "${workspaceFolder}/main.cpp",
+        "${workspaceFolder}/Grafo.cpp",
+        "-o",
+        "${workspaceFolder}/rutaESPE"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
+}

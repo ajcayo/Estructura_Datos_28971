@@ -2,15 +2,12 @@
 #include <string>
 #include <iostream>
 
-// Identificador único para el botón de resolver
-const int BTN_RESOLVER_ID = 101;
-
 // ===================== CONFIGURACION DEL TABLERO =====================
 const int CELL = 60;                 
 const int MARGIN = 40;               
 const int BOARD_SIZE = CELL * 9;     
 const int WIN_WIDTH  = BOARD_SIZE + MARGIN * 2;
-const int WIN_HEIGHT = BOARD_SIZE + MARGIN * 2 + 70; // Espacio extra para el boton
+const int WIN_HEIGHT = BOARD_SIZE + MARGIN * 2 + 50; // Ajustado el alto ya que no hay boton
 
 struct Casilla {
     int valor;        
@@ -71,30 +68,115 @@ bool comprobarVictoria() {
     return true; 
 }
 
-// Algoritmo de Backtracking para resolver el Sudoku de forma automatica
+void imprimirEnConsola() {
+    std::cout << "\n=== SUDOKU SOLUCIONADO EN CONSOLA ===\n";
+    for (int r = 0; r < 9; r++) {
+        if (r > 0 && r % 3 == 0) {
+            std::cout << "------+-------+------\n";
+        }
+        for (int c = 0; c < 9; c++) {
+            if (c > 0 && c % 3 == 0) {
+                std::cout << "| ";
+            }
+            Casilla* actual = *(tablero + r) + c;
+            std::cout << actual->valor << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "=====================================\n\n";
+}
+
 bool resolverSudokuPunteros() {
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
             Casilla* actual = *(tablero + row) + col;
             
-            // Si encontramos una celda vacia
             if (actual->valor == 0) {
                 for (int num = 1; num <= 9; num++) {
                     if (esMovimientoValido(row, col, num)) {
-                        actual->valor = num; // Probamos el numero
+                        actual->valor = num; 
 
                         if (resolverSudokuPunteros()) {
-                            return true; // Si funciona, mantenemos el camino
+                            return true; 
                         }
 
-                        actual->valor = 0; // Si falla, regresamos el cambio (Backtrack)
+                        actual->valor = 0; 
                     }
                 }
-                return false; // Retorna falso si ningun numero del 1 al 9 encaja aca
+                return false; 
             }
         }
     }
-    return true; // Todo lleno con exito
+    return true; 
+}
+
+// Resuelve una copia temporal para no alterar el juego visual de inmediato
+bool resolverYMostrarEnConsola() {
+    // Creamos una matriz temporal para resolverla sin destruir el estado inicial del juego visual
+    Casilla tableroCopia[9][9];
+    
+    // Copiar datos usando punteros
+    for (int r = 0; r < 9; r++) {
+        for (int c = 0; c < 9; c++) {
+            (*(tableroCopia + r) + c)->valor = (*(tablero + r) + c)->valor;
+            (*(tableroCopia + r) + c)->esFija = (*(tablero + r) + c)->esFija;
+        }
+    }
+
+    // Intercambiamos temporalmente el puntero global para que apueste a la copia
+    // Como tablero es un arreglo bidimensional estatico, pasamos una funcion lambda auxiliar local
+    // para resolver de manera directa sobre la copia usando la misma logica de punteros.
+    struct SolverInterno {
+        static bool resolver(Casilla unTablero[9][9], bool (*valido)(int, int, int)) {
+            for (int row = 0; row < 9; row++) {
+                for (int col = 0; col < 9; col++) {
+                    Casilla* actual = *(unTablero + row) + col;
+                    if (actual->valor == 0) {
+                        for (int num = 1; num <= 9; num++) {
+                            // Simulacion de validacion local simplificada para la copia
+                            bool esValido = true;
+                            for (int c = 0; c < 9; c++) {
+                                if (c != col && (*(unTablero + row) + c)->valor == num) esValido = false;
+                            }
+                            for (int r = 0; r < 9; r++) {
+                                if (r != row && (*(unTablero + r) + col)->valor == num) esValido = false;
+                            }
+                            int bR = (row / 3) * 3, bC = (col / 3) * 3;
+                            for (int r = 0; r < 3; r++) {
+                                for (int c = 0; c < 3; c++) {
+                                    if ((bR + r != row || bC + c != col) && (*(unTablero + bR + r) + bC + c)->valor == num) esValido = false;
+                                }
+                            }
+
+                            if (esValido) {
+                                actual->valor = num;
+                                if (resolver(unTablero, valido)) return true;
+                                actual->valor = 0;
+                            }
+                        }
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    };
+
+    if (SolverInterno::resolver(tableroCopia, esMovimientoValido)) {
+        std::cout << "\n=== SUDOKU SOLUCIONADO EN CONSOLA ===\n";
+        for (int r = 0; r < 9; r++) {
+            if (r > 0 && r % 3 == 0) std::cout << "------+-------+------\n";
+            for (int c = 0; c < 9; c++) {
+                if (c > 0 && c % 3 == 0) std::cout << "| ";
+                std::cout << (*(tableroCopia + r) + c)->valor << " ";
+            }
+            std::cout << "\n";
+        }
+        std::cout << "=====================================\n\n";
+        return true;
+    }
+    std::cout << "No se pudo encontrar una solucion para este tablero.\n";
+    return false;
 }
 
 // ===================== INTERFAZ GRAFICA =====================
@@ -168,7 +250,7 @@ void dibujarTablero(HDC hdc) {
 
     HFONT oldFont = (HFONT)SelectObject(hdc, hFontInst);
     
-    if (mensajeEstado.find("SOLUCIONADO") != std::string::npos || mensajeEstado.find("GANASTE") != std::string::npos) {
+    if (mensajeEstado.find("GANASTE") != std::string::npos) {
         SetTextColor(hdc, RGB(34, 139, 34)); 
     } else if (mensajeEstado.find("ERROR") != std::string::npos) {
         SetTextColor(hdc, RGB(220, 20, 60));  
@@ -187,34 +269,6 @@ void dibujarTablero(HDC hdc) {
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
-        case WM_CREATE: {
-            // Creamos el boton "Resolver" usando controles nativos de Windows
-            CreateWindowA(
-                "BUTTON", "Resolver", 
-                WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                WIN_WIDTH - MARGIN - 110, MARGIN + BOARD_SIZE + 8, // Posicion X, Y
-                110, 30,                                           // Ancho y alto
-                hwnd, (HMENU)BTN_RESOLVER_ID, 
-                GetModuleHandle(NULL), NULL
-            );
-            return 0;
-        }
-
-        case WM_COMMAND: {
-            // Capturar la pulsacion del boton Resolver
-            if (LOWORD(wParam) == BTN_RESOLVER_ID) {
-                if (resolverSudokuPunteros()) {
-                    mensajeEstado = "SOLUCIONADO! El sistema encontro la respuesta automatica.";
-                } else {
-                    mensajeEstado = "ERROR! No se encontro una solucion valida para este tablero.";
-                }
-                selRow = -1;
-                selCol = -1;
-                InvalidateRect(hwnd, NULL, TRUE); // Redibujar todo el mapa resuelto
-            }
-            return 0;
-        }
-
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
@@ -298,8 +352,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 int main() {
+    // Ejecutar resolucion automatica en el CMD inmediatamente al abrir el programa
+    std::cout << "Iniciando Sudoku...\n";
+    resolverYMostrarEnConsola();
+
     HINSTANCE hInstance = GetModuleHandle(NULL);
-    const char CLASS_NAME[] = "VentanaSudokuResolucionAutomatica";
+    const char CLASS_NAME[] = "VentanaSudokuResolucionDirecta";
 
     WNDCLASS wc = { };
     wc.lpfnWndProc = WndProc;
@@ -310,7 +368,7 @@ int main() {
     RegisterClass(&wc);
 
     HWND hwnd = CreateWindowEx(
-        0, CLASS_NAME, "Sudoku Arbitrado - Algoritmo Solver Integrado",
+        0, CLASS_NAME, "Sudoku Arbitrado - Solucion Instantanea en Consola",
         WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME & ~WS_MAXIMIZEBOX,
         CW_USEDEFAULT, CW_USEDEFAULT,
         WIN_WIDTH + 16, WIN_HEIGHT + 39, 
@@ -320,6 +378,7 @@ int main() {
     if (hwnd == NULL) return 0;
 
     ShowWindow(hwnd, SW_SHOW);
+
     MSG msg = { };
     while (GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
@@ -328,6 +387,8 @@ int main() {
 
     return 0;
 }
+
+
 
 
 
